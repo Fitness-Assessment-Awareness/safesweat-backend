@@ -36,7 +36,7 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
         WorkoutPlan workoutPlan = mapper.workoutPlanDtoToWorkoutPlan(workoutPlanDto);
         List<WorkoutPlanExercise> workoutPlanExercises = workoutPlan.getWorkoutPlanExercises();
         WorkoutPlan workoutPlanCreated = workoutPlanRepo.save(workoutPlan);
-        mapValidExerciseOrWorkoutPlan(workoutPlanExercises, workoutPlanCreated);
+        assignExerciseAndPlanToWorkoutPlanExercises(workoutPlanExercises, workoutPlanCreated);
         workoutPlanExerciseRepo.saveAll(workoutPlanExercises);
         return mapper.workoutPlanToDto(workoutPlanCreated);
     }
@@ -62,7 +62,7 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
                 .map(workoutPlanExercise -> workoutPlanExercise.getId().getExerciseId())
                 .collect(Collectors.toSet());
         mapper.updateWorkoutPlanFromDto(workoutPlanDto, workoutPlan);
-        mapValidExerciseOrWorkoutPlan(workoutPlan.getWorkoutPlanExercises(), workoutPlan);
+        assignExerciseAndPlanToWorkoutPlanExercises(workoutPlan.getWorkoutPlanExercises(), workoutPlan);
         Set<UUID> exerciseIdsAfterUpdate = workoutPlan.getWorkoutPlanExercises().stream()
                 .map(workoutPlanExercise -> {
                     workoutPlanExercise.setWorkoutPlan(workoutPlan);
@@ -84,18 +84,18 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
         workoutPlanRepo.deleteById(id);
     }
 
-    private void mapValidExerciseOrWorkoutPlan(List<WorkoutPlanExercise> workoutPlanExercises, WorkoutPlan workoutPlan) {
+    private void assignExerciseAndPlanToWorkoutPlanExercises(List<WorkoutPlanExercise> workoutPlanExercises, WorkoutPlan targetPlan) {
         for (WorkoutPlanExercise workoutPlanExercise : workoutPlanExercises) {
             Exercise exercise = workoutPlanRepo
                     .findExerciseById(workoutPlanExercise.getId().getExerciseId());
             if (exercise == null) {
                 throw new IllegalArgumentException("Invalid exercise ID");
             }
-            if (!ObjectUtils.isEmpty(workoutPlan)) {
-                workoutPlanExercise.setWorkoutPlan(workoutPlan);
-                workoutPlanExercise.getId().setPlanId(workoutPlan.getPlanId());
-            }
             workoutPlanExercise.setExercise(exercise);
+            if (!ObjectUtils.isEmpty(targetPlan)) {
+                workoutPlanExercise.setWorkoutPlan(targetPlan);
+                workoutPlanExercise.getId().setPlanId(targetPlan.getPlanId());
+            }
         }
     }
 }
