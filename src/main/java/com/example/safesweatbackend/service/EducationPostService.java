@@ -1,5 +1,6 @@
 package com.example.safesweatbackend.service;
 
+import com.example.safesweatbackend.model.dto.EducationPostCategoryDto;
 import com.example.safesweatbackend.model.dto.EducationPostDto;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface EducationPostService {
     EducationPostDto update(EducationPostDto educationPostDTO);
 
     void delete(UUID id);
+
+    List<EducationPostCategoryDto> getAllCategories();
 }

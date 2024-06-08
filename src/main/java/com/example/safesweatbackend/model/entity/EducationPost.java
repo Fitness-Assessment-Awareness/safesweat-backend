@@ -51,7 +51,7 @@ public class EducationPost {
     @Column(name = "last_updated_by")
     private String lastUpdatedBy;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private EducationPostCategory category;
 }
