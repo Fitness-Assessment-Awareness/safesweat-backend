@@ -33,4 +33,6 @@ public class EducationPostDto {
     private Date lastUpdatedDate;
 
     private String lastUpdatedBy;
+
+    private EducationPostCategoryDto categoryDto;
 }

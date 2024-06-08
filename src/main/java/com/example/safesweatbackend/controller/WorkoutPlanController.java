@@ -1,5 +1,6 @@
 package com.example.safesweatbackend.controller;
 
+import com.example.safesweatbackend.model.dto.ExerciseDto;
 import com.example.safesweatbackend.model.dto.WorkoutPlanDto;
 import com.example.safesweatbackend.service.WorkoutPlanService;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @RequestMapping("/workout-plan")
 public record WorkoutPlanController(WorkoutPlanService workoutPlanService) {
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/list")
     public ResponseEntity<List<WorkoutPlanDto>> getWorkoutPlans() {
         return ResponseEntity.ok(
@@ -20,6 +22,7 @@ public record WorkoutPlanController(WorkoutPlanService workoutPlanService) {
         );
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/{id}")
     public ResponseEntity<WorkoutPlanDto> getWorkoutPlan(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(
@@ -27,6 +30,7 @@ public record WorkoutPlanController(WorkoutPlanService workoutPlanService) {
         );
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping
     public ResponseEntity<WorkoutPlanDto> createWorkoutPlan(@RequestBody WorkoutPlanDto workoutPlanDto) {
         return ResponseEntity.ok(
@@ -34,6 +38,7 @@ public record WorkoutPlanController(WorkoutPlanService workoutPlanService) {
         );
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @PatchMapping
     public ResponseEntity<WorkoutPlanDto> updateWorkoutPlan(@RequestBody WorkoutPlanDto workoutPlanDto) {
         return ResponseEntity.ok(
@@ -41,9 +46,18 @@ public record WorkoutPlanController(WorkoutPlanService workoutPlanService) {
         );
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteWorkoutPlan(@PathVariable("id") UUID id) {
         workoutPlanService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping("/exercises")
+    public ResponseEntity<List<ExerciseDto>> getExercises() {
+        return ResponseEntity.ok(
+                workoutPlanService.getAllExercises()
+        );
     }
 }
