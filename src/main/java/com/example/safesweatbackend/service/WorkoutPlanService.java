@@ -1,5 +1,6 @@
 package com.example.safesweatbackend.service;
 
+import com.example.safesweatbackend.model.dto.ExerciseDto;
 import com.example.safesweatbackend.model.dto.WorkoutPlanDto;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface WorkoutPlanService {
     WorkoutPlanDto update(WorkoutPlanDto workoutPlanDto);
 
     void delete(UUID id);
+
+    List<ExerciseDto> getAllExercises();
 }

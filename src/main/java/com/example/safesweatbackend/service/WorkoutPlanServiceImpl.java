@@ -1,6 +1,8 @@
 package com.example.safesweatbackend.service;
 
+import com.example.safesweatbackend.mapper.ExerciseMapper;
 import com.example.safesweatbackend.mapper.WorkoutPlanMapper;
+import com.example.safesweatbackend.model.dto.ExerciseDto;
 import com.example.safesweatbackend.model.dto.WorkoutPlanDto;
 import com.example.safesweatbackend.model.entity.Exercise;
 import com.example.safesweatbackend.model.entity.WorkoutPlan;
@@ -10,6 +12,7 @@ import com.example.safesweatbackend.repo.WorkoutPlanRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
@@ -25,7 +28,9 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
 
     private final WorkoutPlanExerciseRepo workoutPlanExerciseRepo;
 
-    private final WorkoutPlanMapper mapper;
+    private final WorkoutPlanMapper planMapper;
+
+    private final ExerciseMapper exerciseMapper;
 
     @Override
     @Transactional
@@ -33,24 +38,26 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
         if (!ObjectUtils.isEmpty(workoutPlanDto.getPlanId())) {
             throw new IllegalArgumentException("Plan ID must be null");
         }
-        WorkoutPlan workoutPlan = mapper.workoutPlanDtoToWorkoutPlan(workoutPlanDto);
+        WorkoutPlan workoutPlan = planMapper.workoutPlanDtoToWorkoutPlan(workoutPlanDto);
         List<WorkoutPlanExercise> workoutPlanExercises = workoutPlan.getWorkoutPlanExercises();
         WorkoutPlan workoutPlanCreated = workoutPlanRepo.save(workoutPlan);
-        assignExerciseAndPlanToWorkoutPlanExercises(workoutPlanExercises, workoutPlanCreated);
-        workoutPlanExerciseRepo.saveAll(workoutPlanExercises);
-        return mapper.workoutPlanToDto(workoutPlanCreated);
+        if (!CollectionUtils.isEmpty(workoutPlanExercises)) {
+            assignExerciseAndPlanToWorkoutPlanExercises(workoutPlanExercises, workoutPlanCreated);
+            workoutPlanExerciseRepo.saveAll(workoutPlanExercises);
+        }
+        return planMapper.workoutPlanToDto(workoutPlanCreated);
     }
 
     @Override
     public WorkoutPlanDto get(UUID id) {
         WorkoutPlan workoutPlan = workoutPlanRepo.findById(id).get();
-        return mapper.workoutPlanToDto(workoutPlan);
+        return planMapper.workoutPlanToDto(workoutPlan);
     }
 
     @Override
     public List<WorkoutPlanDto> getAll() {
         List<WorkoutPlan> workoutPlans = workoutPlanRepo.findAll();
-        return mapper.workoutPlansToDtos(workoutPlans);
+        return planMapper.workoutPlansToDtos(workoutPlans);
     }
 
     @Override
@@ -61,7 +68,7 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
         Set<UUID> exerciseIdsBeforeUpdate = workoutPlan.getWorkoutPlanExercises().stream()
                 .map(workoutPlanExercise -> workoutPlanExercise.getId().getExerciseId())
                 .collect(Collectors.toSet());
-        mapper.updateWorkoutPlanFromDto(workoutPlanDto, workoutPlan);
+        planMapper.updateWorkoutPlanFromDto(workoutPlanDto, workoutPlan);
         assignExerciseAndPlanToWorkoutPlanExercises(workoutPlan.getWorkoutPlanExercises(), workoutPlan);
         Set<UUID> exerciseIdsAfterUpdate = workoutPlan.getWorkoutPlanExercises().stream()
                 .map(workoutPlanExercise -> {
@@ -76,7 +83,7 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
             }
         }
         WorkoutPlan workoutPlanUpdated = workoutPlanRepo.save(workoutPlan);
-        return mapper.workoutPlanToDto(workoutPlanUpdated);
+        return planMapper.workoutPlanToDto(workoutPlanUpdated);
     }
 
     @Override
@@ -84,9 +91,15 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
         workoutPlanRepo.deleteById(id);
     }
 
+    @Override
+    public List<ExerciseDto> getAllExercises() {
+        List<Exercise> exercises = workoutPlanExerciseRepo.findAllExercises();
+        return exerciseMapper.exercisesToDtos(exercises);
+    }
+
     private void assignExerciseAndPlanToWorkoutPlanExercises(List<WorkoutPlanExercise> workoutPlanExercises, WorkoutPlan targetPlan) {
         for (WorkoutPlanExercise workoutPlanExercise : workoutPlanExercises) {
-            Exercise exercise = workoutPlanRepo
+            Exercise exercise = workoutPlanExerciseRepo
                     .findExerciseById(workoutPlanExercise.getId().getExerciseId());
             if (exercise == null) {
                 throw new IllegalArgumentException("Invalid exercise ID");
