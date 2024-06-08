@@ -3,3 +3,12 @@ spring.datasource.url=
 spring.jpa.properties.hibernate.show_sql=true
 spring.jpa.properties.hibernate.format_sql=true
 spring.jpa.hibernate.ddl-auto=none
+
+# HikariCP Settings
+spring.datasource.hikari.maximum-pool-size=20
+spring.datasource.hikari.idle-timeout=60000
+spring.datasource.hikari.connection-timeout=30000
+
+# Configure HikariCP to close prepared statements properly
+spring.datasource.hikari.leakDetectionThreshold=2000
+spring.datasource.hikari.auto-commit=true
