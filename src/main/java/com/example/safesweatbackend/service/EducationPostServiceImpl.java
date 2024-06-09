@@ -29,6 +29,7 @@ public class EducationPostServiceImpl implements EducationPostService {
         if (educationPostRepo.findCategoryById(educationPostDTO.getCategoryId()) == null) {
             throw new IllegalArgumentException("Invalid Category ID");
         }
+        educationPostDTO.setLikeCount(0L);
         EducationPost educationPost = postMapper.educationPostDtoToEducationPost(educationPostDTO);
         Date currentDate = new Date();
         educationPost.setCreatedDate(currentDate);
