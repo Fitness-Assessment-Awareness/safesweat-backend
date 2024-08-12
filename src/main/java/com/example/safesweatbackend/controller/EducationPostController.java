@@ -14,7 +14,6 @@ import java.util.UUID;
 @RequestMapping("/education-post")
 public record EducationPostController(EducationPostService educationPostService) {
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/list")
     public ResponseEntity<List<EducationPostDto>> getEducationPosts() {
         return ResponseEntity.ok(
@@ -22,7 +21,6 @@ public record EducationPostController(EducationPostService educationPostService)
         );
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/{id}")
     public ResponseEntity<EducationPostDto> getEducationPost(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(
@@ -30,7 +28,6 @@ public record EducationPostController(EducationPostService educationPostService)
         );
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping
     public ResponseEntity<EducationPostDto> createEducationPost(@RequestBody EducationPostDto educationPostDto) {
         System.out.println(educationPostDto);
@@ -39,7 +36,6 @@ public record EducationPostController(EducationPostService educationPostService)
         );
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @PatchMapping
     public ResponseEntity<EducationPostDto> updateEducationPost(@RequestBody EducationPostDto educationPostDto) {
         return ResponseEntity.ok(
@@ -47,14 +43,12 @@ public record EducationPostController(EducationPostService educationPostService)
         );
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEducationPost(@PathVariable("id") UUID id) {
         educationPostService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/categories")
     public ResponseEntity<List<EducationPostCategoryDto>> getEducationPostCategories() {
         return ResponseEntity.ok(
