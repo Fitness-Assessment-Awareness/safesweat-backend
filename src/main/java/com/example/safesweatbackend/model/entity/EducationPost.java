@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity(name = "education_post")
@@ -36,9 +37,6 @@ public class EducationPost {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Column(name = "like_count")
-    private Long likeCount;
-
     @Column(name = "created_date")
     private Date createdDate;
 
@@ -54,4 +52,7 @@ public class EducationPost {
     @ManyToOne
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private EducationPostCategory category;
+
+    @OneToMany(mappedBy = "educationPost", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<EducationPostLike> educationPostLikes;
 }

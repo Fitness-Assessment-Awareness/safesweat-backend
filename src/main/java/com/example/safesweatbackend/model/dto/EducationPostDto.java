@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -24,8 +25,6 @@ public class EducationPostDto {
 
     private String imageUrl;
 
-    private Long likeCount;
-
     private Date createdDate;
 
     private String createdBy;
@@ -35,4 +34,6 @@ public class EducationPostDto {
     private String lastUpdatedBy;
 
     private EducationPostCategoryDto categoryDto;
+
+    private List<EducationPostLikeDto> educationPostLikeDtos;
 }

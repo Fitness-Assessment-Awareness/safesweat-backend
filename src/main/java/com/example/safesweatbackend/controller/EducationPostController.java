@@ -2,6 +2,8 @@ package com.example.safesweatbackend.controller;
 
 import com.example.safesweatbackend.model.dto.EducationPostCategoryDto;
 import com.example.safesweatbackend.model.dto.EducationPostDto;
+import com.example.safesweatbackend.model.dto.EducationPostLikeDto;
+import com.example.safesweatbackend.model.dto.EducationPostSummaryDto;
 import com.example.safesweatbackend.service.EducationPostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,13 @@ public record EducationPostController(EducationPostService educationPostService)
         );
     }
 
+    @GetMapping("/list-summary")
+    public ResponseEntity<List<EducationPostSummaryDto>> getEducationPostSummaries() {
+        return ResponseEntity.ok(
+            educationPostService.getAllSummaries()
+        );
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<EducationPostDto> getEducationPost(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(
@@ -30,7 +39,6 @@ public record EducationPostController(EducationPostService educationPostService)
 
     @PostMapping
     public ResponseEntity<EducationPostDto> createEducationPost(@RequestBody EducationPostDto educationPostDto) {
-        System.out.println(educationPostDto);
         return ResponseEntity.ok(
                 educationPostService.create(educationPostDto)
         );
@@ -54,5 +62,24 @@ public record EducationPostController(EducationPostService educationPostService)
         return ResponseEntity.ok(
                 educationPostService.getAllCategories()
         );
+    }
+
+    @PostMapping("/like")
+    public ResponseEntity<EducationPostLikeDto> likePost(@RequestBody EducationPostLikeDto educationPostLikeDto) {
+        return ResponseEntity.ok(
+                educationPostService.like(educationPostLikeDto)
+        );
+    }
+
+    @PostMapping("/dislike")
+    public ResponseEntity<Void> removeLikePost(@RequestBody EducationPostLikeDto educationPostLikeDto) {
+        educationPostService.deleteLike(educationPostLikeDto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @DeleteMapping("/likes/{userId}")
+    public ResponseEntity<Void> removeAllLikes(@PathVariable("userId") UUID userId) {
+        educationPostService.deleteUserLikes(userId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
