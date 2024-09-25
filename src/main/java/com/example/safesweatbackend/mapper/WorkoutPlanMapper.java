@@ -19,6 +19,6 @@ public interface WorkoutPlanMapper {
     @Mapping(source = "workoutPlanExerciseDtos", target = "workoutPlanExercises")
     WorkoutPlan workoutPlanDtoToWorkoutPlan(WorkoutPlanDto workoutPlanDto);
 
-    @Mapping(source = "workoutPlanExerciseDtos", target = "workoutPlanExercises")
+    @Mapping(source = "workoutPlanExercises", target = "workoutPlanExerciseDtos")
     List<WorkoutPlanDto> workoutPlansToDtos(List<WorkoutPlan> workoutPlans);
 }

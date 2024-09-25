@@ -2,6 +2,7 @@ package com.example.safesweatbackend.repo;
 
 import com.example.safesweatbackend.model.entity.Exercise;
 import com.example.safesweatbackend.model.entity.WorkoutPlanExercise;
+import com.example.safesweatbackend.model.entity.WorkoutPlanExerciseId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -9,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.UUID;
 
-public interface WorkoutPlanExerciseRepo extends JpaRepository<WorkoutPlanExercise, UUID> {
+public interface WorkoutPlanExerciseRepo extends JpaRepository<WorkoutPlanExercise, WorkoutPlanExerciseId> {
 
     @Query("SELECT e FROM exercise e")
     List<Exercise> findAllExercises();
