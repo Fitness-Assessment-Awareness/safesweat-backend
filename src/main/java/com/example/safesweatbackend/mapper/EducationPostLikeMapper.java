@@ -1,6 +1,5 @@
 package com.example.safesweatbackend.mapper;
 
-import com.example.safesweatbackend.model.dto.EducationPostDto;
 import com.example.safesweatbackend.model.dto.EducationPostLikeDto;
 import com.example.safesweatbackend.model.entity.EducationPostLike;
 import org.mapstruct.*;
@@ -21,7 +20,7 @@ public interface EducationPostLikeMapper {
 
     @Mapping(source = "postId", target = "id.postId")
     @Mapping(source = "userId", target = "id.userId")
-    List<EducationPostLike> educationPostLikeDtosToEducationPostLikes(List<EducationPostDto> educationPostDtos);
+    List<EducationPostLike> educationPostLikeDtosToEducationPostLikes(List<EducationPostLikeDto> educationPostLikeDtos);
 
     @Mapping(source = "id.postId", target = "postId")
     @Mapping(source = "id.userId", target = "userId")
