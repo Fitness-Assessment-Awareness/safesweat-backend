@@ -36,4 +36,6 @@ public class EducationPostDto {
     private EducationPostCategoryDto categoryDto;
 
     private List<EducationPostLikeDto> educationPostLikeDtos;
+
+    private List<EducationPostBookmarkDto> educationPostBookmarkDtos;
 }

@@ -1,17 +1,17 @@
 package com.example.safesweatbackend.service;
 
+import com.example.safesweatbackend.mapper.EducationPostBookmarkMapper;
 import com.example.safesweatbackend.mapper.EducationPostCategoryMapper;
 import com.example.safesweatbackend.mapper.EducationPostLikeMapper;
 import com.example.safesweatbackend.mapper.EducationPostMapper;
-import com.example.safesweatbackend.model.dto.EducationPostCategoryDto;
-import com.example.safesweatbackend.model.dto.EducationPostDto;
-import com.example.safesweatbackend.model.dto.EducationPostLikeDto;
-import com.example.safesweatbackend.model.dto.EducationPostSummaryDto;
+import com.example.safesweatbackend.model.dto.*;
 import com.example.safesweatbackend.model.entity.EducationPost;
+import com.example.safesweatbackend.model.entity.EducationPostBookmark;
 import com.example.safesweatbackend.model.entity.EducationPostCategory;
 import com.example.safesweatbackend.model.entity.EducationPostLike;
 import com.example.safesweatbackend.repo.EducationPostLikeRepo;
 import com.example.safesweatbackend.repo.EducationPostRepo;
+import com.example.safesweatbackend.repo.EducationPostBookmarkRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,11 +28,15 @@ public class EducationPostServiceImpl implements EducationPostService {
 
     private final EducationPostLikeRepo educationPostLikeRepo;
 
+    private final EducationPostBookmarkRepo educationPostBookmarkRepo;
+
     private final EducationPostMapper postMapper;
 
     private final EducationPostCategoryMapper categoryMapper;
 
     private final EducationPostLikeMapper likeMapper;
+
+    private final EducationPostBookmarkMapper bookmarkMapper;
 
     @Override
     public EducationPostDto create(EducationPostDto educationPostDTO) {
@@ -106,5 +110,26 @@ public class EducationPostServiceImpl implements EducationPostService {
     @Override
     public List<EducationPostSummaryDto> getAllSummaries() {
        return educationPostRepo.findAllSummaries();
+    }
+
+    @Override
+    public EducationPostBookmarkDto bookmark(EducationPostBookmarkDto educationPostBookmarkDto) {
+        EducationPostBookmark educationPostBookmark = bookmarkMapper.educationPostBookmarkDtoToEducationPostBookmark(educationPostBookmarkDto);
+        EducationPost educationPost = educationPostRepo.findById(educationPostBookmark.getId().getPostId()).get();
+        educationPostBookmark.setEducationPost(educationPost);
+        EducationPostBookmark educationPostBookmarkCreated = educationPostBookmarkRepo.save(educationPostBookmark);
+        return bookmarkMapper.educationPostBookmarkToDto(educationPostBookmarkCreated);
+    }
+
+    @Override
+    public void deleteBookmark(EducationPostBookmarkDto educationPostBookmarkDto) {
+        EducationPostBookmark educationPostBookmark = bookmarkMapper.educationPostBookmarkDtoToEducationPostBookmark(educationPostBookmarkDto);
+        educationPostBookmarkRepo.delete(educationPostBookmark);
+    }
+
+    @Transactional
+    @Override
+    public void deleteUserBookmarks(UUID userId) {
+        educationPostBookmarkRepo.deleteUserBookmarks(userId);
     }
 }

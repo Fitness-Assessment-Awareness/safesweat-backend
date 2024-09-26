@@ -55,4 +55,7 @@ public class EducationPost {
 
     @OneToMany(mappedBy = "educationPost", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<EducationPostLike> educationPostLikes;
+
+    @OneToMany(mappedBy = "educationPost", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<EducationPostBookmark> educationPostBookmarks;
 }

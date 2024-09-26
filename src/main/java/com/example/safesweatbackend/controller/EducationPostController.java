@@ -1,9 +1,6 @@
 package com.example.safesweatbackend.controller;
 
-import com.example.safesweatbackend.model.dto.EducationPostCategoryDto;
-import com.example.safesweatbackend.model.dto.EducationPostDto;
-import com.example.safesweatbackend.model.dto.EducationPostLikeDto;
-import com.example.safesweatbackend.model.dto.EducationPostSummaryDto;
+import com.example.safesweatbackend.model.dto.*;
 import com.example.safesweatbackend.service.EducationPostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -80,6 +77,25 @@ public record EducationPostController(EducationPostService educationPostService)
     @DeleteMapping("/likes/{userId}")
     public ResponseEntity<Void> removeAllLikes(@PathVariable("userId") UUID userId) {
         educationPostService.deleteUserLikes(userId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/bookmark")
+    public ResponseEntity<EducationPostBookmarkDto> bookmarkPost(@RequestBody EducationPostBookmarkDto educationPostBookmarkDto) {
+        return ResponseEntity.ok(
+                educationPostService.bookmark(educationPostBookmarkDto)
+        );
+    }
+
+    @PostMapping("/bookmark-remove")
+    public ResponseEntity<Void> removeBookmarkPost(@RequestBody EducationPostBookmarkDto educationPostBookmarkDto) {
+        educationPostService.deleteBookmark(educationPostBookmarkDto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @DeleteMapping("/bookmark/{userId}")
+    public ResponseEntity<Void> removeAllBookmarks(@PathVariable("userId") UUID userId) {
+        educationPostService.deleteUserBookmarks(userId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

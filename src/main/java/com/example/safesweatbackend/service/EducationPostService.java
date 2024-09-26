@@ -1,9 +1,6 @@
 package com.example.safesweatbackend.service;
 
-import com.example.safesweatbackend.model.dto.EducationPostCategoryDto;
-import com.example.safesweatbackend.model.dto.EducationPostDto;
-import com.example.safesweatbackend.model.dto.EducationPostLikeDto;
-import com.example.safesweatbackend.model.dto.EducationPostSummaryDto;
+import com.example.safesweatbackend.model.dto.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,4 +26,10 @@ public interface EducationPostService {
     void deleteUserLikes(UUID userId);
 
     List<EducationPostSummaryDto> getAllSummaries();
+
+    EducationPostBookmarkDto bookmark(EducationPostBookmarkDto educationPostBookmarkDto);
+
+    void deleteBookmark(EducationPostBookmarkDto educationPostBookmarkDto);
+
+    void deleteUserBookmarks(UUID userId);
 }
