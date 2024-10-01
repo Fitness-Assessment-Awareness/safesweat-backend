@@ -27,6 +27,8 @@ public interface EducationPostService {
 
     List<EducationPostSummaryDto> getAllSummaries();
 
+    List<EducationPostSummaryDto> getAllBookmarkSummaries(UUID userId);
+
     EducationPostBookmarkDto bookmark(EducationPostBookmarkDto educationPostBookmarkDto);
 
     void deleteBookmark(EducationPostBookmarkDto educationPostBookmarkDto);

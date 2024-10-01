@@ -20,6 +20,13 @@ public record EducationPostController(EducationPostService educationPostService)
         );
     }
 
+    @GetMapping("/list-summary/bookmark/{userId}")
+    public ResponseEntity<List<EducationPostSummaryDto>> getBookmarkPostsSummaries(@PathVariable("userId") UUID userId) {
+        return ResponseEntity.ok(
+                educationPostService.getAllBookmarkSummaries(userId)
+        );
+    }
+
     @GetMapping("/list-summary")
     public ResponseEntity<List<EducationPostSummaryDto>> getEducationPostSummaries() {
         return ResponseEntity.ok(

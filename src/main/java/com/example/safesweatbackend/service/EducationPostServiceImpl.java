@@ -113,6 +113,11 @@ public class EducationPostServiceImpl implements EducationPostService {
     }
 
     @Override
+    public List<EducationPostSummaryDto> getAllBookmarkSummaries(UUID userId) {
+        return educationPostRepo.findAllBookmarkSummaries(userId);
+    }
+
+    @Override
     public EducationPostBookmarkDto bookmark(EducationPostBookmarkDto educationPostBookmarkDto) {
         EducationPostBookmark educationPostBookmark = bookmarkMapper.educationPostBookmarkDtoToEducationPostBookmark(educationPostBookmarkDto);
         EducationPost educationPost = educationPostRepo.findById(educationPostBookmark.getId().getPostId()).get();
