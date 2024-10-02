@@ -21,7 +21,7 @@ public record EducationPostController(EducationPostService educationPostService)
     }
 
     @GetMapping("/list-summary/bookmark/{userId}")
-    public ResponseEntity<List<EducationPostSummaryDto>> getBookmarkPostsSummaries(@PathVariable("userId") UUID userId) {
+    public ResponseEntity<List<EducationPostSummaryDto>> getBookmarkPostSummaries(@PathVariable("userId") UUID userId) {
         return ResponseEntity.ok(
                 educationPostService.getAllBookmarkSummaries(userId)
         );
