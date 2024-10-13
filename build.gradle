@@ -52,8 +52,4 @@ azurewebapp {
         webContainer = 'Java SE'
         javaVersion = 'Java 17'
     }
-    appSettings {
-        SPRING_APPLICATION_NAME = 'safesweat-backend'
-        SPRING_DATASOURCE_URL = 'jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?prepareThreshold=0&user=postgres.vqsrdxphqrgatdtgjsjc&password=pkHJNnsbh6lyGxxG'
-    }
 }
