@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.0'
     id 'io.spring.dependency-management' version '1.1.5'
+    id "com.microsoft.azure.azurewebapp" version "1.10.0"
 }
 
 group = 'com.example'
@@ -38,4 +39,21 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+azurewebapp {
+    subscription = '00ea6119-1f39-4184-8ebc-eb02a96c10bc'
+    resourceGroup = 'safesweat-backend_group'
+    appName = 'safesweat-backend'
+    pricingTier = 'F1'
+    region = 'southeastasia'
+    runtime {
+        os = 'Windows'
+        webContainer = 'Java SE'
+        javaVersion = 'Java 17'
+    }
+    appSettings {
+        SPRING_APPLICATION_NAME = 'safesweat-backend'
+        SPRING_DATASOURCE_URL = 'jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?prepareThreshold=0&user=postgres.vqsrdxphqrgatdtgjsjc&password=pkHJNnsbh6lyGxxG'
+    }
 }
