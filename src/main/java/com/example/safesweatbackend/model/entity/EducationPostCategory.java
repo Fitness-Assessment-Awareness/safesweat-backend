@@ -21,6 +21,9 @@ public class EducationPostCategory {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "name_ms", nullable = false)
+    private String nameMs;
+
     @OneToMany(mappedBy = "category")
     List<EducationPost> educationPosts;
 }

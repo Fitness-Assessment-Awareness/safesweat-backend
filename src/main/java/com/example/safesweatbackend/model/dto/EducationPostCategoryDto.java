@@ -12,4 +12,6 @@ public class EducationPostCategoryDto {
     private UUID categoryId;
 
     private String name;
+
+    private String nameMs;
 }
