@@ -25,4 +25,9 @@ public interface EducationPostRepo extends JpaRepository<EducationPost, UUID> {
             "LEFT JOIN education_post_like l ON p.postId = l.id.postId " +
             "WHERE b.id.userId = :userId GROUP BY p.postId")
     List<EducationPostSummaryDto> findAllBookmarkSummaries(UUID userId);
+
+    @Query("SELECT new com.example.safesweatbackend.model.dto.EducationPostSummaryDto(p.postId, p.titleEn, p.titleMs, p.imageUrl, p.categoryId, COUNT(l.id.postId)) FROM education_post p " +
+            "LEFT JOIN education_post_like l ON p.postId = l.id.postId " +
+            "WHERE p.categoryId = :categoryId GROUP BY p.postId ORDER BY COUNT(p.postId) DESC")
+    List<EducationPostSummaryDto> findPostsByCategoryIdOrderByLikesDesc(UUID categoryId);
 }

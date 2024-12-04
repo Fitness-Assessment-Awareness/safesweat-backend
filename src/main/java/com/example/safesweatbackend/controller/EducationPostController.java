@@ -34,6 +34,13 @@ public record EducationPostController(EducationPostService educationPostService)
         );
     }
 
+    @GetMapping("/list-summary/recommended/{userId}")
+    public ResponseEntity<List<EducationPostSummaryDto>> getRecommendedEducationPosts(@PathVariable("userId") UUID userId) {
+        return ResponseEntity.ok(
+                educationPostService.getRecommended(userId)
+        );
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<EducationPostDto> getEducationPost(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(

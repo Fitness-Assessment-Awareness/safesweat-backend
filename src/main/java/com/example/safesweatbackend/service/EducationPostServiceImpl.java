@@ -16,9 +16,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -136,5 +134,27 @@ public class EducationPostServiceImpl implements EducationPostService {
     @Override
     public void deleteUserBookmarks(UUID userId) {
         educationPostBookmarkRepo.deleteUserBookmarks(userId);
+    }
+
+    @Override
+    public List<EducationPostSummaryDto> getRecommended(UUID userId) {
+        EducationPostCategory userFavoriteCategory = educationPostBookmarkRepo.findUserFavouriteCategory(userId);
+        if (userFavoriteCategory == null) {
+            return new ArrayList<>();
+        }
+        List<EducationPostSummaryDto> educationPostSummaryDtos =
+                educationPostRepo.findPostsByCategoryIdOrderByLikesDesc(userFavoriteCategory.getCategoryId());
+        HashSet<UUID> bookmarkedPostIds = new HashSet<>(educationPostBookmarkRepo.findAllBookmarkedPostsByUserId(userId));
+        List<EducationPostSummaryDto> result = new ArrayList<>();
+        int RECOMMENDED_POSTS_MAX_COUNT = 3;
+        for (EducationPostSummaryDto educationPostSummaryDto : educationPostSummaryDtos) {
+            if (result.size() == RECOMMENDED_POSTS_MAX_COUNT) {
+                break;
+            }
+            if (!bookmarkedPostIds.contains(educationPostSummaryDto.getPostId())) {
+                result.add(educationPostSummaryDto);
+            }
+        }
+        return result;
     }
 }

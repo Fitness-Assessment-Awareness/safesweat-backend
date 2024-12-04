@@ -34,4 +34,6 @@ public interface EducationPostService {
     void deleteBookmark(EducationPostBookmarkDto educationPostBookmarkDto);
 
     void deleteUserBookmarks(UUID userId);
+
+    List<EducationPostSummaryDto> getRecommended(UUID userId);
 }
