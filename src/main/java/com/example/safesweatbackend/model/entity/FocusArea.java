@@ -7,19 +7,16 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@Entity(name = "exercise")
+@Entity(name = "focus_area")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Exercise {
+public class FocusArea {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID exerciseId;
+    private UUID focusAreaId;
 
     @Column(name = "name", nullable = false)
     private String name;
-
-    @Column(name = "exercise_key", nullable = false)
-    private String exerciseKey;
 }

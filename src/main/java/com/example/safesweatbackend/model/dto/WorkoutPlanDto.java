@@ -27,5 +27,9 @@ public class WorkoutPlanDto {
 
     private DifficultyType difficulty;
 
+    private UUID focusAreaId;
+
+    private FocusAreaDto focusAreaDto;
+
     private List<WorkoutPlanExerciseDto> workoutPlanExerciseDtos;
 }

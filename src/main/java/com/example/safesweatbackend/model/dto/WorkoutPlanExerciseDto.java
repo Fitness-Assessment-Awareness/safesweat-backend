@@ -16,4 +16,6 @@ public class WorkoutPlanExerciseDto {
     private Short estimatedTimeSecond;
 
     private Short repCount;
+
+    private String exerciseKey;
 }

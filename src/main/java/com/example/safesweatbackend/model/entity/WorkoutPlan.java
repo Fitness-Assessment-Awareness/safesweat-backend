@@ -41,6 +41,13 @@ public class WorkoutPlan {
     @Enumerated(EnumType.STRING)
     private DifficultyType difficulty;
 
+    @Column(name = "focus_area_id", nullable = false)
+    private UUID focusAreaId;
+
+    @ManyToOne
+    @JoinColumn(name = "focus_area_id", insertable = false, updatable = false)
+    private FocusArea focusArea;
+
     @OneToMany(mappedBy = "workoutPlan", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @OrderBy("id.exerciseId ASC")
     private List<WorkoutPlanExercise> workoutPlanExercises;

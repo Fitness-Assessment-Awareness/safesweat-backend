@@ -7,11 +7,9 @@ import java.util.UUID;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ExerciseDto {
+public class FocusAreaDto {
 
-    private UUID exerciseId;
+    private UUID focusAreaId;
 
     private String name;
-
-    private String exerciseKey;
 }

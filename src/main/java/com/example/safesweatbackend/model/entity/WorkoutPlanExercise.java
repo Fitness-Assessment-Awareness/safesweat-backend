@@ -25,7 +25,7 @@ public class WorkoutPlanExercise {
     @JoinColumn(name = "plan_id")
     private WorkoutPlan workoutPlan;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @MapsId("exerciseId")
     @JoinColumn(name = "exercise_id")
     private Exercise exercise;
