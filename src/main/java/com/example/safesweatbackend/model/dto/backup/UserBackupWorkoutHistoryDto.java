@@ -1,5 +1,6 @@
 package com.example.safesweatbackend.model.dto.backup;
 
+import com.example.safesweatbackend.model.type.DifficultyType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
@@ -18,4 +19,14 @@ public class UserBackupWorkoutHistoryDto {
     private Double rating;
 
     private Double multiplier;
+
+    private String type;
+
+    private String titleEn;
+
+    private String titleMs;
+
+    private String imageUrl;
+
+    private DifficultyType difficulty;
 }

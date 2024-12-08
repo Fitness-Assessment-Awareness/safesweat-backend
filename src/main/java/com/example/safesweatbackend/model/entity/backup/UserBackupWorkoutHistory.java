@@ -1,5 +1,6 @@
 package com.example.safesweatbackend.model.entity.backup;
 
+import com.example.safesweatbackend.model.type.DifficultyType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,21 @@ public class UserBackupWorkoutHistory {
 
     @Column(name = "multiplier")
     private Double multiplier;
+
+    @Column(name = "type")
+    private String type;
+
+    @Column(name = "title_en")
+    private String titleEn;
+
+    @Column(name = "title_ms")
+    private String titleMs;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @Column(name = "difficulty")
+    private DifficultyType difficulty;
 
     @ManyToOne
     @MapsId("userId")
