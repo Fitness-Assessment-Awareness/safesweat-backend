@@ -9,4 +9,6 @@ public interface UserBackupService {
     UserBackupDataDto create(UserBackupDataDto userBackupDataDto);
 
     UserBackupDataDto get(UUID userId);
+
+    void delete(UUID userId);
 }

@@ -101,4 +101,9 @@ public class UserBackupServiceImpl implements UserBackupService {
         }
         return userBackupDataMapper.userBackupDataToDto(userBackupData);
     }
+
+    @Override
+    public void delete(UUID userId) {
+        userBackupDataRepo.deleteById(userId);
+    }
 }

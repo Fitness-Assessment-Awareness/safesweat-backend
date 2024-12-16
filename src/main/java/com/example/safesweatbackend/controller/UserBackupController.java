@@ -24,4 +24,10 @@ public record UserBackupController(UserBackupService userBackupService) {
                 userBackupService.create(userBackupDataDto)
         );
     }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUserBackupData(@PathVariable("userId") UUID userId) {
+        userBackupService.delete(userId);
+        return ResponseEntity.accepted().build();
+    }
 }
