@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -65,21 +66,26 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
     public WorkoutPlanDto update(WorkoutPlanDto workoutPlanDto) {
         UUID planId = workoutPlanDto.getPlanId();
         WorkoutPlan workoutPlan = workoutPlanRepo.findById(planId).get();
-        Set<UUID> exerciseIdsBeforeUpdate = workoutPlan.getWorkoutPlanExercises().stream()
-                .map(workoutPlanExercise -> workoutPlanExercise.getId().getExerciseId())
-                .collect(Collectors.toSet());
+        Set<UUID> exerciseIdsBeforeUpdate = new HashSet<>();
+        if (!CollectionUtils.isEmpty(workoutPlanDto.getWorkoutPlanExerciseDtos())) {
+            exerciseIdsBeforeUpdate = workoutPlan.getWorkoutPlanExercises().stream()
+                    .map(workoutPlanExercise -> workoutPlanExercise.getId().getExerciseId())
+                    .collect(Collectors.toSet());
+        }
         planMapper.updateWorkoutPlanFromDto(workoutPlanDto, workoutPlan);
-        assignExerciseAndPlanToWorkoutPlanExercises(workoutPlan.getWorkoutPlanExercises(), workoutPlan);
-        Set<UUID> exerciseIdsAfterUpdate = workoutPlan.getWorkoutPlanExercises().stream()
-                .map(workoutPlanExercise -> {
-                    workoutPlanExercise.setWorkoutPlan(workoutPlan);
-                    return workoutPlanExercise.getId().getExerciseId();
-                })
-                .collect(Collectors.toSet());
-        workoutPlanExerciseRepo.saveAll(workoutPlan.getWorkoutPlanExercises());
-        for (UUID exerciseId : exerciseIdsBeforeUpdate) {
-            if (!exerciseIdsAfterUpdate.contains(exerciseId)) {
-                workoutPlanExerciseRepo.deleteByExerciseId(exerciseId);
+        if (!CollectionUtils.isEmpty(workoutPlanDto.getWorkoutPlanExerciseDtos())) {
+            assignExerciseAndPlanToWorkoutPlanExercises(workoutPlan.getWorkoutPlanExercises(), workoutPlan);
+            Set<UUID> exerciseIdsAfterUpdate = workoutPlan.getWorkoutPlanExercises().stream()
+                    .map(workoutPlanExercise -> {
+                        workoutPlanExercise.setWorkoutPlan(workoutPlan);
+                        return workoutPlanExercise.getId().getExerciseId();
+                    })
+                    .collect(Collectors.toSet());
+            workoutPlanExerciseRepo.saveAll(workoutPlan.getWorkoutPlanExercises());
+            for (UUID exerciseId : exerciseIdsBeforeUpdate) {
+                if (!exerciseIdsAfterUpdate.contains(exerciseId)) {
+                    workoutPlanExerciseRepo.deleteByExerciseId(exerciseId);
+                }
             }
         }
         WorkoutPlan workoutPlanUpdated = workoutPlanRepo.save(workoutPlan);
