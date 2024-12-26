@@ -86,4 +86,47 @@ class UserBackupControllerTest {
         response.andExpect(status().isAccepted())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("Save User Backup Data with Missing Fields")
+    @Order(4)
+    public void saveUserBackupDataWithMissingFields() throws Exception {
+        UserBackupDataDto incompleteDto = new UserBackupDataDto();
+        incompleteDto.setUserId(UUID.randomUUID());
+        incompleteDto.setDifficulty(DifficultyType.Beginner);
+
+        ResultActions response = mockMvc.perform(post("/user-backup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(incompleteDto))
+        );
+
+        response.andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Get User Backup Data with Invalid User ID")
+    @Order(5)
+    public void getUserBackupDataWithInvalidUserId() throws Exception {
+        UUID invalidUserId = UUID.randomUUID();
+        given(userBackupService.get(invalidUserId)).willReturn(null);
+
+        ResultActions response = mockMvc.perform(get("/user-backup/{userId}", invalidUserId));
+
+        response.andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Delete User Backup Data with Invalid User ID")
+    @Order(6)
+    public void deleteUserBackupDataWithInvalidUserId() throws Exception {
+        UUID invalidUserId = UUID.randomUUID();
+        willDoNothing().given(userBackupService).delete(invalidUserId);
+
+        ResultActions response = mockMvc.perform(delete("/user-backup/{userId}", invalidUserId));
+
+        response.andExpect(status().isNotFound())
+                .andDo(print());
+    }
 }

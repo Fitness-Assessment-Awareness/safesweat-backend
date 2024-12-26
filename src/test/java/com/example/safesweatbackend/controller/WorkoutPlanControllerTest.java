@@ -1,5 +1,6 @@
 package com.example.safesweatbackend.controller;
 
+import com.example.safesweatbackend.model.dto.ExerciseDto;
 import com.example.safesweatbackend.model.dto.WorkoutPlanDto;
 import com.example.safesweatbackend.model.type.DifficultyType;
 import com.example.safesweatbackend.service.WorkoutPlanService;
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -107,5 +109,77 @@ class WorkoutPlanControllerTest {
 
         response.andExpect(status().isNoContent())
                 .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Get Workout Plans List")
+    @Order(5)
+    public void getWorkoutPlansList() throws Exception {
+        given(workoutPlanService.getAll()).willReturn(List.of(workoutPlanDto));
+        ResultActions response = mockMvc.perform(get("/workout-plan/list"));
+
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.size()").value(1))
+                .andExpect(jsonPath("$[0].titleEn").value(workoutPlanDto.getTitleEn()));
+    }
+
+    @Test
+    @DisplayName("Get Workout Plan with Invalid ID")
+    @Order(6)
+    public void getWorkoutPlanWithInvalidId() throws Exception {
+        UUID invalidId = UUID.randomUUID();
+        given(workoutPlanService.get(invalidId)).willReturn(null);
+
+        ResultActions response = mockMvc.perform(get("/workout-plan/{id}", invalidId));
+
+        response.andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Update Workout Plan with Missing Fields")
+    @Order(7)
+    public void updateWorkoutPlanWithMissingFields() throws Exception {
+        WorkoutPlanDto incompleteDto = new WorkoutPlanDto();
+        incompleteDto.setPlanId(UUID.randomUUID());
+
+        ResultActions response = mockMvc.perform(patch("/workout-plan")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(incompleteDto))
+        );
+
+        response.andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Delete Workout Plan with Invalid ID")
+    @Order(8)
+    public void deleteWorkoutPlanWithInvalidId() throws Exception {
+        UUID invalidId = UUID.randomUUID();
+        willDoNothing().given(workoutPlanService).delete(invalidId);
+
+        ResultActions response = mockMvc.perform(delete("/workout-plan/{id}", invalidId));
+
+        response.andExpect(status().isNoContent())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Get Exercises List")
+    @Order(9)
+    public void getExercisesList() throws Exception {
+        ExerciseDto exerciseDto = new ExerciseDto();
+        exerciseDto.setExerciseId(UUID.randomUUID());
+        exerciseDto.setName("Test Exercise");
+        given(workoutPlanService.getAllExercises()).willReturn(List.of(exerciseDto));
+
+        ResultActions response = mockMvc.perform(get("/workout-plan/exercises"));
+
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.size()").value(1))
+                .andExpect(jsonPath("$[0].name").value(exerciseDto.getName()));
     }
 }

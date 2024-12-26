@@ -3,6 +3,7 @@ package com.example.safesweatbackend.service;
 import com.example.safesweatbackend.constant.TestData;
 import com.example.safesweatbackend.mapper.EducationPostMapper;
 import com.example.safesweatbackend.model.dto.EducationPostDto;
+import com.example.safesweatbackend.model.dto.EducationPostSummaryDto;
 import com.example.safesweatbackend.model.entity.EducationPost;
 import com.example.safesweatbackend.model.entity.EducationPostCategory;
 import com.example.safesweatbackend.repo.EducationPostRepo;
@@ -12,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -109,4 +111,78 @@ class EducationPostServiceTest {
         assertDoesNotThrow(() -> educationPostService.delete(educationPostDto.getPostId()));
     }
 
+    @Test
+    @DisplayName("Get All Education Post Summaries")
+    @Order(5)
+    public void getAllEducationPostSummaries() {
+        EducationPostSummaryDto summaryDto = new EducationPostSummaryDto(
+                UUID.randomUUID(),
+                "Summary Title",
+                "Summary Content",
+                "Test User",
+                UUID.randomUUID(),
+                0L
+        );
+        summaryDto.setPostId(UUID.randomUUID());
+        summaryDto.setTitleEn("Summary Title");
+
+        given(educationPostRepo.findAllSummaries()).willReturn(List.of(summaryDto));
+
+        List<EducationPostSummaryDto> summaries = educationPostService.getAllSummaries();
+
+        assertNotNull(summaries);
+        assertEquals(1, summaries.size());
+        assertEquals("Summary Title", summaries.get(0).getTitleEn());
+    }
+
+    @Test
+    @DisplayName("Get All Bookmark Summaries by User ID")
+    @Order(6)
+    public void getAllBookmarkSummariesByUserId() {
+        UUID userId = UUID.randomUUID();
+        EducationPostSummaryDto summaryDto = new EducationPostSummaryDto(
+                UUID.randomUUID(),
+                "Summary Title",
+                "Summary Content",
+                "Test User",
+                UUID.randomUUID(),
+                0L
+        );
+        summaryDto.setPostId(UUID.randomUUID());
+        summaryDto.setTitleEn("Bookmark Summary Title");
+
+        given(educationPostRepo.findAllBookmarkSummaries(userId)).willReturn(List.of(summaryDto));
+
+        List<EducationPostSummaryDto> bookmarkSummaries = educationPostService.getAllBookmarkSummaries(userId);
+
+        assertNotNull(bookmarkSummaries);
+        assertEquals(1, bookmarkSummaries.size());
+        assertEquals("Bookmark Summary Title", bookmarkSummaries.get(0).getTitleEn());
+    }
+
+    @Test
+    @DisplayName("Create Education Post with Invalid Category ID")
+    @Order(7)
+    public void createEducationPostWithInvalidCategoryId() {
+        given(educationPostRepo.findCategoryById(educationPostDto.getCategoryId())).willReturn(null);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            educationPostService.create(educationPostDto);
+        });
+
+        assertEquals("Invalid Category ID", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Update Education Post with Invalid Category ID")
+    @Order(8)
+    public void updateEducationPostWithInvalidCategoryId() {
+        given(educationPostRepo.findCategoryById(educationPostDto.getCategoryId())).willReturn(null);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            educationPostService.update(educationPostDto);
+        });
+
+        assertEquals("Invalid Category ID", exception.getMessage());
+    }
 }
