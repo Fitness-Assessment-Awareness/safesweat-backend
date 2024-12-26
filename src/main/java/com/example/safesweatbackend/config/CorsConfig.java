@@ -16,6 +16,7 @@ public class CorsConfig {
         config.setAllowCredentials(true);
         config.addAllowedOriginPattern("exp://*:8081");
         config.addAllowedOrigin("http://localhost:5173");
+        config.addAllowedOrigin("https://safesweat-admin-hed5d6hpb6esatg6.southeastasia-01.azurewebsites.net");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
