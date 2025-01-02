@@ -41,7 +41,7 @@ public class WorkoutPlan {
     @Enumerated(EnumType.STRING)
     private DifficultyType difficulty;
 
-    @Column(name = "focus_area_id", nullable = false)
+    @Column(name = "focus_area_id")
     private UUID focusAreaId;
 
     @ManyToOne

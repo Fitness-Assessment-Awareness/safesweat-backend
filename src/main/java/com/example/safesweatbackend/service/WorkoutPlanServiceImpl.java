@@ -41,6 +41,9 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
         }
         WorkoutPlan workoutPlan = planMapper.workoutPlanDtoToWorkoutPlan(workoutPlanDto);
         List<WorkoutPlanExercise> workoutPlanExercises = workoutPlan.getWorkoutPlanExercises();
+        if (workoutPlan.getPlanId() == null) {
+            workoutPlan.setFocusAreaId(UUID.fromString("5e23ea41-6351-48e6-91cd-ed83197f2a29"));
+        }
         WorkoutPlan workoutPlanCreated = workoutPlanRepo.save(workoutPlan);
         if (!CollectionUtils.isEmpty(workoutPlanExercises)) {
             assignExerciseAndPlanToWorkoutPlanExercises(workoutPlanExercises, workoutPlanCreated);
