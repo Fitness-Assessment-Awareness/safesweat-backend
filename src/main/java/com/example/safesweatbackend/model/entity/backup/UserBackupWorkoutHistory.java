@@ -39,6 +39,12 @@ public class UserBackupWorkoutHistory {
     @Column(name = "difficulty")
     private DifficultyType difficulty;
 
+    @Column(name = "calories_burned")
+    private Double caloriesBurned;
+
+    @Column(name = "time_taken")
+    private Double timeTaken;
+
     @ManyToOne
     @MapsId("userId")
     @JoinColumn(name = "user_id")

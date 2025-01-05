@@ -29,4 +29,8 @@ public class UserBackupWorkoutHistoryDto {
     private String imageUrl;
 
     private DifficultyType difficulty;
+
+    private Double caloriesBurned;
+
+    private Double timeTaken;
 }
